@@ -7,4 +7,7 @@ module.exports = {
     "@storybook/preset-create-react-app",
   ],
   framework: "@storybook/react",
+  features: {
+    storyStoreV7: true,
+  },
 };
