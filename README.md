@@ -6,7 +6,7 @@ This is a demo repository based on [Create React App](https://github.com/faceboo
 
 ## `yarn storybook`
 
-- Stortybook 6.4 (still) works great with an `id` set for a story to have a **permalink** that _will not change_ based on the location of the story (this may be essential for some use cases).
+- Storybook 6.4 (still) works great with an `id` set for a story to have a **permalink** that _will not change_ based on the location of the story (this may be essential for some use cases).
 
 ```javascript
 // src/stories/Button.stories.tsx
