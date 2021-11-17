@@ -2,6 +2,8 @@
 
 This is a demo repository based on [Create React App](https://github.com/facebook/create-react-app) and [Storybook 6.4-RC3](https://github.com/storybookjs/storybook/issues/15355).
 
+> See published at https://fabiradi.github.io/storybook-v6.4-story-ids/
+
 ## `yarn storybook`
 
 - Stortybook 6.4 (still) works great with an `id` set for a story to have a **permalink** that _will not change_ based on the location of the story (this may be essential for some use cases).
@@ -11,7 +13,7 @@ This is a demo repository based on [Create React App](https://github.com/faceboo
 export default {
   title: 'Example/Button',
   component: Button,
-  id: 'mybutton', // ⚠️ This is important
+  id: 'mybutton', // 🚨 This is important
 } as ComponentMeta<typeof Button>
 ```
 
@@ -34,7 +36,7 @@ If you want to use the new [v7 story store](https://github.com/storybookjs/story
 module.exports = {
   // ...
   features: {
-    storyStoreV7: true, // ⚠️ activating this casues the conflict
+    storyStoreV7: true, // 🚨 activating this casues the conflict
   },
 };
 ```
