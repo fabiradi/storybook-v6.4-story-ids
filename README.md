@@ -1,46 +1,56 @@
-# Getting Started with Create React App
+# Using `id` for story conflicts with `storyStoreV7`
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a demo repository based on [Create React App](https://github.com/facebook/create-react-app) and [Storybook 6.4-RC3](https://github.com/storybookjs/storybook/issues/15355).
 
-## Available Scripts
+## `yarn storybook`
 
-In the project directory, you can run:
+- Stortybook 6.4 (still) works great with an `id` set for a story to have a **permalink** that _will not change_ based on the location of the story (this may be essential for some use cases).
 
-### `yarn start`
+```javascript
+// src/stories/Button.stories.tsx
+export default {
+  title: 'Example/Button',
+  component: Button,
+  id: 'mybutton', // ⚠️ This is important
+} as ComponentMeta<typeof Button>
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### How the ID is used
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```javascript
+// Generated story ID based on "title" (no "id" property set)
+example-button--primary
 
-### `yarn test`
+// Story ID based on property "id"
+mybutton--primary
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### What is not working?
 
-### `yarn build`
+If you want to use the new [v7 story store](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#using-the-v7-store), the **manually set IDs** seem to be ignored.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```javascript
+// .storybook/main.js
+module.exports = {
+  // ...
+  features: {
+    storyStoreV7: true, // ⚠️ activating this casues the conflict
+  },
+};
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### What happens?
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The `id` is not respected and falls back to something _derived_ from `title`.
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```plain
+Didn't find 'example-button--primary' in CSF file, this is unexpected
+Error: Didn't find 'example-button--primary' in CSF file, this is unexpected
+    at StoryStore.storyFromCSFFile (http://localhost:6006/vendors~main.iframe.bundle.js:15439:15)
+    at StoryStore._callee2$ (http://localhost:6006/vendors~main.iframe.bundle.js:15410:56)
+    at tryCatch (http://localhost:6006/vendors~main.iframe.bundle.js:96208:40)
+    at Generator.invoke [as _invoke] (http://localhost:6006/vendors~main.iframe.bundle.js:96439:22)
+    at Generator.next (http://localhost:6006/vendors~main.iframe.bundle.js:96264:21)
+    at asyncGeneratorStep (http://localhost:6006/vendors~main.iframe.bundle.js:15130:103)
+    at _next (http://localhost:6006/vendors~main.iframe.bundle.js:15132:194)
+```
